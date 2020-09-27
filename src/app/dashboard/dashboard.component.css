@@ -1,0 +1,16 @@
+
+@media (min-width: 576px) and (max-width: 767.98px) { 
+    .subto-class {
+    font-size: 10px;
+    }
+
+ }
+
+ .subtodo-input-class > input {
+    border-style: solid;
+    border-width: 1px;
+ }
+
+ .todo > button {
+     margin: 10px 0 10px 0;
+ }

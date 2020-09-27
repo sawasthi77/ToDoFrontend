@@ -1,0 +1,303 @@
+
+<app-header></app-header>
+<div class="container todo" *ngIf="!userClicked">
+  <button class="todoclass btn-primary" (click)="toDo()">ToDo List</button>
+</div>
+
+<div class="container" *ngIf="!userClicked">
+  <table class="table table-striped table-responsive-sm">
+    <thead *ngIf="toDoList && toDoList.length > 0">
+      <tr>
+        <th scope="col">To Do List</th>
+        <th scope="col">Delete</th>
+        <th scope="col">Status</th>
+        <th scope="col">History</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="toDoList">
+      <tr *ngFor="let item of toDoList">
+        <td class="todoname" (click)="showToDoList(item)">{{item.toDoName}}</td>
+        <td>
+          <i class="fa fa-trash" aria-hidden="true" (click)="updateToDo(item, false)"></i>
+        </td>
+        <td>{{item.status}}</td>
+        <td><i class="fa fa-history" aria-hidden="true" (click)="showhistory(item)"></i></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<div class="container mt-10" *ngIf="!userClicked">
+  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" *ngIf="friendRequest">
+    
+    <li class="nav-item">
+      <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home"
+        aria-selected="true">Request Sent To</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile"
+        aria-selected="false">Request From</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact"
+        aria-selected="false">My Friends</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="pills-myfriends-tab" data-toggle="pill" href="#pills-myfriends" role="tab" aria-controls="pills-myfriends"
+        aria-selected="false">Find Friends</a>
+    </li>
+  </ul>
+  <div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+      <div class="container" *ngIf="friendRequest">
+        <div *ngFor="let item of friendRequest">
+          <div class="row">
+            <div class="col-md-6">
+              <p>{{item.firstName}}</p>
+              <p>{{item.email}}</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="container" *ngIf="friendRequest.length === 0">
+          <h4>No Friends request</h4>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+      <div class="container" *ngIf="friendRequestSend">
+        <div *ngFor="let item of friendRequestSend">
+          <div class="row">
+            <div class="col-md-6">
+              <p>{{item.firstName}}</p>
+              <p>{{item.email}}</p>
+            </div>
+            <div class="col-md-6">
+              <button class="btn-primary" (click)="acceptFriendship(item)">Accept Friendship</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container" *ngIf="friendRequestSend.length === 0">
+          <h4>No Friends Requests Send</h4>
+      </div>
+      
+    </div>
+    <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+      <div class="container" *ngIf="myFriends">
+          <div class="row">
+            <div class="col-md-6">
+              <!-- <p (click)= "myFriendDetails(item)" class="todoname">{{item.firstName}}</p>
+              <p>{{item.email}}</p> -->
+        <table class="table table-bordered table-responsive-sm" *ngIf="myFriends">
+          <thead *ngIf="myFriends">
+            <tr>
+              <th scope="col">
+                Name
+              </th>
+              <th scope="col">
+                Email
+              </th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let item of myFriends">
+              <td (click)= "myFriendDetails(item)" class="todoname">{{item.firstName}}</td>
+              <td>{{item.email}}</td>
+          </tbody>
+        </table>
+            </div>
+            <div class="col-md-6">
+            </div>
+          </div>
+      </div>
+      <div class="container" *ngIf="myFriends.length === 0">
+          <h4>No Friends</h4>
+      </div>
+     
+    </div>
+    <div class="tab-pane fade" id="pills-myfriends" role="tabpanel" aria-labelledby="pills-myfriends-tab">
+        <table class="table table-bordered table-responsive-sm" *ngIf="userList">
+          <thead>
+            <tr>
+              <th scope="col">First Name</th>
+              <th scope="col">Second Name</th>
+              <th scope="col">Mobile Number</th>
+              <th scope="col">Email</th>
+              <th scope="col">Request Friend</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of userList">
+              <td>{{item.firstName}}</td>
+              <td>{{item.lastName}}</td>
+              <td>{{item.mobileNumber}}</td>
+              <td>{{item.email}}</td>
+              <td>
+                <button class="btn-primary" (click)="addFriend(item)">Add Friend</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal fade" id="toDoModal" tabindex="-1" role="dialog" 
+aria-labelledby="exampleModalLabel" aria-hidden="true" *ngIf="!userClicked">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add To Do</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label>Enter ToDo List</label>
+        <br>
+        <input type="text" name="toDoList" [(ngModel)]="toDoDetails.toDoName">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" (click)="addToDo()">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="toDoEditModal" tabindex="-1" role="dialog" 
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update To Do</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row mt-4">
+          <div class="col">
+            <label>ToDo</label>
+          </div>
+          <div class="col subtodo-input-class">
+            <input type="text" name="toDoList" [(ngModel)]="toDoDetails.toDoName">
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-md-6 col-sm-4">
+            <label class="subto-class">Sub ToDo Items</label>
+          </div>
+          <div class="col-md-4 col-sm-4 subtodo-input-class">
+            <input type="text" name="toDoSubList" [(ngModel)]="subToDoItem">
+          </div>
+          <div class="col-md-2 col-sm-2 subitem">
+            <i class="fa fa-plus-square" aria-hidden="true" (click)="addSubToDoItem()"></i>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col">
+            <label>Status</label>
+          </div>
+          <div class="col">
+            <select [(ngModel)]="toDoDetails.status">
+              <option value="Open">Open</option>
+              <option value="Done">Done</option>
+            </select>
+
+          </div>
+
+        </div>
+
+        <table class="mt-4">
+          <tbody>
+            <tr *ngFor="let item of toDoDetails.subToDoItems">
+              <td>#</td>
+              <td>{{item.subToDoName}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="updateToDo(toDoDetails, true)">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="historyModal" tabindex="-1" role="dialog" 
+aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!-- <h5 class="modal-title" id="exampleModalLabel">History Details</h5> -->
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+          <table class="table table-bordered table-responsive-sm" *ngIf="historyData">
+              <thead>
+                <tr>
+                  <th scope="col">History Details</th>
+      
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of historyData.history">
+                  <td>{{item}}</td>
+                  
+                </tr>
+              </tbody>
+            </table>  
+
+
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<div *ngIf="userClicked">
+  <div class="container">
+      <button type="button" class="btn btn-link" (click)="back()">Back</button>
+  </div>
+    <div class="container" *ngIf="toDoList.length>0">
+        <table class="table table-striped table-responsive-sm">
+          <thead *ngIf="toDoList && toDoList.length > 0">
+            <tr>
+              <th scope="col">To Do List</th>
+              <th scope="col">Delete</th>
+              <th scope="col">Status</th>
+              <th scope="col">History</th>
+      
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of toDoList">
+              <td class="todoname" (click)="showToDoList(item)">{{item.toDoName}}</td>
+              <td>
+                <i class="fa fa-trash" aria-hidden="true" (click)="updateToDo(item, false)"></i>
+              </td>
+              <td>{{item.status}}</td>
+              <td><i class="fa fa-history" aria-hidden="true" (click)="showhistory(item)"></i></td>
+      
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div *ngIf="!toDoList.length > 0">
+        <div class="container">
+          <h4>No Todo List</h4>
+        </div>
+      </div>
+</div>
