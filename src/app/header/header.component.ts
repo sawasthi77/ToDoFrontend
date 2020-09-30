@@ -13,7 +13,7 @@ declare var $: any;
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  private socket = io('https://fast-island-94955.herokuapp.com');
+  private socket = io('http://ec2-13-235-91-77.ap-south-1.compute.amazonaws.com');
 
   authToken: string;
   userId: string;

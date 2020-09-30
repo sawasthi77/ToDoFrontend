@@ -56,7 +56,7 @@ eventDetails = {
   'authToken': ''
 }
 
-socketURL = io('https://fast-island-94955.herokuapp.com');
+socketURL = io('http://localhost:3000');
 
 
   constructor(private service: AppserviceService, 

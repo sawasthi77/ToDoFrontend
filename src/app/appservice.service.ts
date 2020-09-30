@@ -14,8 +14,7 @@ export class AppserviceService {
 
   }
 
-  //url = 'https://shielded-bayou-65133.herokuapp.com/api/v1';
-  url = 'https://fast-island-94955.herokuapp.com/api/v1';
+  url = 'https://ec2-13-235-91-77.ap-south-1.compute.amazonaws.com/api/v1';
 
   login(user) {
     let response = this.http.post(`${this.url}/login`, user);
